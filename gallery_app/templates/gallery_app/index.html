@@ -12,17 +12,19 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
+    <a href="{% url 'logout' %}">Вийти</a>
+    <a href="{% url 'post-create' %}">Новий пост</a>
     <p>{{ username }}</p>
     <div class="wrapper">
-        <div class="inner-wrap">
             {% for post in posts %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
-                <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-                <a>{{ post.user }}</a>
-                <span id="post-{{ post.pk }}-likes">{{ post.likes }}</span>
-                <button type="button" onclick="likePost({{ post.pk }})">Лайк</button>
+                <div class="item">
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+                    <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+                    <a>{{ post.user }}</a>
+                    <span id="post-{{ post.pk }}-likes">{{ post.likes }}</span>
+                    <button type="button" onclick="likePost({{ post.pk }})">Лайк</button>
+                </div>
             {% endfor %}
-        </div>
     </div>
 <script>
     function likePost(postId) {

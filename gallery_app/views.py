@@ -1,12 +1,13 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 
 class PostListView(LoginRequiredMixin, ListView):
@@ -33,17 +34,17 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    template_name = 'post_form.html'
+    template_name = 'gallery_app/post_form.html'
     success_url = reverse_lazy('posts')
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
-    template_name = 'post_form.html'
+    template_name = 'gallery_app/post_form.html'
     context_object_name = 'post'
     success_url = reverse_lazy('posts')
 
@@ -81,3 +82,18 @@ class LogoutView(View):
         logout(request)
         return redirect(reverse_lazy('register'))
         
+
+class LikePostView(View):
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id)
+        user = request.user
+
+        if Like.objects.filter(user=user, post=post).exists():
+            return JsonResponse({'error': 'Ви вже залишили лайк для цього поста'}, status=400)
+        else:
+            Like.objects.create(user=user, post=post)
+            post.likes += 1
+            post.save()
+
+        likes_count = post.like_set.count()
+        return JsonResponse({'likes_count': likes_count})

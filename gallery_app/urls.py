@@ -6,6 +6,8 @@ from django.contrib import admin
 
 urlpatterns = [
     path('gallery', PostListView.as_view(), name='posts'),
+    path('gallery/create', PostCreateView.as_view(), name='post-create'),
+    path('gallery/<int:post_id>/like/', LikePostView.as_view(), name='like-post'),
     path('gallery/<int:pk>', PostDetailView.as_view(), name='post-detail'),
     path('gallery/<int:pk>/delete', PostDeleteView.as_view(), name='post-delete'),
     path('gallery/<int:pk>/update', PostUpdateView.as_view(), name='post-update'),

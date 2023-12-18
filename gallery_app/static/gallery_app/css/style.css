@@ -1,0 +1,19 @@
+.wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.item{
+    flex: 0 0 33.33%;
+    box-sizing: border-box; 
+    padding: 10px;
+    margin: 25px;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-image{
+    max-height: 300px;
+}

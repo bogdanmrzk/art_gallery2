@@ -9,5 +9,7 @@
     <h1>{{ post.title }}</h1>
     <p>{{ post.description }}</p>
     <img src="{{ post.image.url }}" alt="{{ post.title }}">
+    <a href="{% url 'posts' %}">На головну</a>
+    <a href="{% url 'post-delete' post.pk %}">Видалити</a>
 </body>
 </html>
